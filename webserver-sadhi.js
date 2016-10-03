@@ -1,4 +1,5 @@
 const http = require('http');
+const fs = require('fs');
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -6,7 +7,11 @@ const port = 3000;
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/html');
-  res.end('<head><title>SADHI</title></head><body><h1 style="color:red;">Sistema de Apura&ccedil;&atilde;o de Dados H&iacute;dricos</h1></body><p title="o famoso tooltip">Teste do Node.js</p>');
+  fs.readFile('tela.html', 'utf8', (err, data)=> {
+    if (err) throw err;
+    console.log(data);
+    res.end(data);
+  });
 });
 
 server.listen(port, hostname, () => {
