@@ -2,7 +2,19 @@ const http = require('http');
 const fs = require('fs');
 const os = require('os');
 
-const hostname = '127.0.0.1';
+var interfaces = os.networkInterfaces();
+var addresses = "localhost";
+for (var k in interfaces) {
+    for (var k2 in interfaces[k]) {
+        var address = interfaces[k][k2];
+        if (address.family === 'IPv4' && !address.internal) {
+            addresses = address.address;
+        }
+    }
+}
+// console.log(`Endereço do servidor: ${addresses}`);
+
+const hostname = addresses;
 const port = 3000;
 
 const server = http.createServer((req, res) => {
@@ -12,18 +24,6 @@ const server = http.createServer((req, res) => {
     if (err) throw err;
     res.end(data);
   });
-  var interfaces = os.networkInterfaces();
-  var addresses = [];
-  for (var k in interfaces) {
-      for (var k2 in interfaces[k]) {
-          var address = interfaces[k][k2];
-          if (address.family === 'IPv4' && !address.internal) {
-              addresses.push(address.address);
-          }
-      }
-  }
-
-  console.log(addresses);
 });
 
 server.listen(port, hostname, () => {
